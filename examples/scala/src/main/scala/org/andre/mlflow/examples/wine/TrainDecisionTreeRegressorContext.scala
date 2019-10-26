@@ -52,6 +52,9 @@ object TrainDecisionTreeRegressorContext {
     println(s"Run ID: $runId")
     println(s"runOrigin: $runOrigin")
 
+    // MLflow - set tag
+    run.setTag("dataPath",dataHolder.dataPath)
+
     // MLflow - log parameters
     val params = Seq(("maxDepth",maxDepth),("maxBins",maxBins),("runOrigin",runOrigin))
     println(s"Params:")
@@ -97,8 +100,8 @@ object TrainDecisionTreeRegressorContext {
     run.logArtifact(path,"details")
 
     // MLflow - Save model in Spark ML and MLeap formats
-    TrainUtils.saveModelAsSparkMLContext(run, s"$outputDir/models", model)
-    TrainUtils.saveModelAsMLeapContext(run, s"$outputDir/models", model, predictions)
+    TrainUtils.logModelAsSparkMLContext(run, s"$outputDir/models", model)
+    TrainUtils.logModelAsMLeapContext(run, s"$outputDir/models", model, predictions)
 
     // MLflow - close run
     run.endRun()
